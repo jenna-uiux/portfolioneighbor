@@ -67,11 +67,42 @@ Currently uses an emoji favicon (🏘️). Replace the favicon link in `index.ht
 
 ### API Integration
 
-The current version uses mock data for demonstration. To integrate with real APIs:
+The current version uses a hybrid search system combining ChatGPT and Google Custom Search API. To set up the APIs:
 
-1. **Replace mock functions** in `script.js` with actual API calls
-2. **Add your API keys** (OpenAI, Bing Search, etc.)
-3. **Update the data flow** to match your backend endpoints
+#### Required Environment Variables
+
+1. **OpenAI API Key** (Required):
+   ```bash
+   OPENAI_API_KEY=sk-your-openai-api-key
+   ```
+
+2. **Google Custom Search API** (Optional, for enhanced results):
+   ```bash
+   GOOGLE_API_KEY=your-google-api-key
+   GOOGLE_SEARCH_ENGINE_ID=your-search-engine-id
+   ```
+
+#### Setting up Google Custom Search API
+
+1. **Create a Google Cloud Project**:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing one
+   - Enable the "Custom Search API"
+
+2. **Get API Key**:
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "API Key"
+   - Copy the API key
+
+3. **Create Custom Search Engine**:
+   - Go to [Google Programmable Search Engine](https://programmablesearchengine.google.com/)
+   - Click "Create a search engine"
+   - Enter any site (e.g., `www.google.com`)
+   - Get your Search Engine ID from the control panel
+
+4. **Add Environment Variables**:
+   - For Vercel: Add in Project Settings > Environment Variables
+   - For local development: Create `.env.local` file
 
 ## 🔮 Future Enhancements
 
