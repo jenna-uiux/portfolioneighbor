@@ -7,10 +7,10 @@
       "maxDuration": 30
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.js"
+      "source": "/api/analyze",
+      "destination": "/api/analyze.js"
     }
   ]
 }
