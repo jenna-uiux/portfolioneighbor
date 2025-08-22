@@ -49,39 +49,14 @@ form.addEventListener("submit", async (e) => {
   hideResults();
 
   try {
-    // Step 1: Analyze the portfolio
-    const analysis = await analyzePortfolio(
-      portfolioUrl,
-      keywords,
-      experienceLevel
-    );
-
-    // Step 2: Search for similar portfolios
-    const searchResults = await searchSimilarPortfolios(analysis.queries);
-
-    // Step 3: Rank and filter results
-    const rankedResults = await rankPortfolios(analysis, searchResults);
-
-    // Display results
-    displayResults(analysis, rankedResults);
-  } catch (error) {
-    console.error("Error:", error);
-    showError(error.message || "Something went wrong. Please try again.");
-  } finally {
-    setLoadingState(false);
-  }
-});
-
-// API Functions
-async function analyzePortfolio(url, keywords, experienceLevel) {
-  try {
+    // Single API call to get everything
     const response = await fetch("/api/analyze", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url,
+        url: portfolioUrl,
         keywords,
         experienceLevel,
       }),
@@ -91,117 +66,17 @@ async function analyzePortfolio(url, keywords, experienceLevel) {
       throw new Error("Failed to analyze portfolio");
     }
 
-    return await response.json();
-  } catch (error) {
-    console.error("Analysis error:", error);
-    // Fallback to mock data for demo
-    return {
-      theme: ["minimal", "playful"],
-      layout: ["single-page", "grid"],
-      emphasis: ["design-systems", "motion"],
-      queries: [
-        "minimal portfolio design examples",
-        "playful single page portfolio",
-        "design systems portfolio showcase",
-        "motion design portfolio",
-        "creative developer portfolio",
-      ],
-      summary:
-        "A clean, minimal portfolio with playful interactions and strong focus on design systems and motion design.",
-    };
-  }
-}
-
-async function searchSimilarPortfolios(queries) {
-  try {
-    const response = await fetch("/api/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ queries }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to search portfolios");
-    }
-
     const data = await response.json();
-    return data.candidates;
+
+    // Display results
+    displayResults(data.analysis, data.portfolios, data.summary);
   } catch (error) {
-    console.error("Search error:", error);
-    // Fallback to mock data for demo
-    return [
-      {
-        url: "https://example-portfolio-1.com",
-        title: "Sarah Chen - Creative Developer",
-        snippet:
-          "Minimal portfolio showcasing design systems and interactive experiences",
-        score: 0.92,
-      },
-      {
-        url: "https://example-portfolio-2.com",
-        title: "Alex Rivera - Motion Designer",
-        snippet:
-          "Playful single-page portfolio with stunning motion design and clean aesthetics",
-        score: 0.88,
-      },
-      {
-        url: "https://example-portfolio-3.com",
-        title: "Maya Patel - UX Designer",
-        snippet:
-          "Design systems focused portfolio with minimal approach and creative interactions",
-        score: 0.85,
-      },
-      {
-        url: "https://example-portfolio-4.com",
-        title: "David Kim - Frontend Developer",
-        snippet:
-          "Clean, playful portfolio emphasizing motion design and user experience",
-        score: 0.82,
-      },
-      {
-        url: "https://example-portfolio-5.com",
-        title: "Emma Wilson - Creative Technologist",
-        snippet:
-          "Minimal design systems portfolio with innovative motion and interaction design",
-        score: 0.79,
-      },
-    ];
+    console.error("Error:", error);
+    showError(error.message || "Something went wrong. Please try again.");
+  } finally {
+    setLoadingState(false);
   }
-}
-
-async function rankPortfolios(analysis, candidates) {
-  try {
-    const response = await fetch("/api/rank", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        analysis,
-        candidates,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to rank portfolios");
-    }
-
-    const data = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error("Rank error:", error);
-    // Fallback to simple ranking
-    return candidates
-      .map((candidate) => ({
-        ...candidate,
-        score: candidate.score || Math.random() * 0.3 + 0.7,
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-  }
-}
+});
 
 // UI Functions
 function setLoadingState(loading) {
@@ -230,9 +105,9 @@ function hideResults() {
   resultsSection.classList.add("hidden");
 }
 
-function displayResults(analysis, portfolios) {
+function displayResults(analysis, portfolios, summary) {
   // Display analysis summary
-  displayAnalysisSummary(analysis);
+  displayAnalysisSummary(analysis, summary);
 
   // Display portfolio cards
   displayPortfolioCards(portfolios);
@@ -242,10 +117,10 @@ function displayResults(analysis, portfolios) {
   resultsSection.scrollIntoView({ behavior: "smooth" });
 }
 
-function displayAnalysisSummary(analysis) {
+function displayAnalysisSummary(analysis, summary) {
   summaryContent.innerHTML = `
         <div class="bg-gray-50 p-4 rounded-xl">
-            <p class="text-gray-700">${analysis.summary}</p>
+            <p class="text-gray-700">${summary}</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -304,17 +179,28 @@ function displayPortfolioCards(portfolios) {
                 </span>
             </div>
             
-            <p class="text-gray-600 text-sm mb-4 line-clamp-3">${
+            <p class="text-gray-600 text-sm mb-2 line-clamp-2">${
               portfolio.snippet
             }</p>
             
+            <p class="text-xs text-gray-500 mb-4 italic">${
+              portfolio.matchReason || "Similar portfolio style"
+            }</p>
+            
             <div class="space-y-3">
-                <!-- Preview iframe (simulated) -->
+                <!-- Real iframe preview -->
                 <div class="bg-gray-100 rounded-lg h-32 flex items-center justify-center">
-                    <div class="text-center text-gray-500">
-                        <div class="text-2xl mb-2">🖼️</div>
-                        <div class="text-xs">Live Preview</div>
-                    </div>
+                  <iframe 
+                    src="${portfolio.url}" 
+                    class="w-full h-full rounded-lg"
+                    loading="lazy"
+                    sandbox="allow-scripts allow-same-origin"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                  ></iframe>
+                  <div class="text-center text-gray-500" style="display: none;">
+                    <div class="text-2xl mb-2">🖼️</div>
+                    <div class="text-xs">Preview Unavailable</div>
+                  </div>
                 </div>
                 
                 <a 
