@@ -1,0 +1,30 @@
+{
+  "name": "portfolio-neighborhood",
+  "version": "1.0.0",
+  "description": "AI-powered portfolio discovery tool with minimal yet cute design",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "portfolio",
+    "ai",
+    "design",
+    "discovery",
+    "vanilla-js",
+    "tailwind"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "dependencies": {
+    "openai": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

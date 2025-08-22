@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio Neighborhood 🏘️</title>
+    <meta
+      name="description"
+      content="Find similar portfolios with AI-powered analysis"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏘️</text></svg>"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              main: "#DBF227",
+              bg: "#f2f2f2",
+              text: "#0D0D0D",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f2f2f2;
+        color: #0d0d0d;
+      }
+
+      .cute-shadow {
+        box-shadow: 0 4px 20px rgba(219, 242, 39, 0.15);
+      }
+
+      .cute-border {
+        border: 2px solid #dbf227;
+        border-radius: 16px;
+      }
+
+      .gradient-bg {
+        background: linear-gradient(135deg, #dbf227 0%, #c4e61a 100%);
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(219, 242, 39, 0.25);
+      }
+
+      .loading-dots {
+        display: inline-block;
+      }
+
+      .loading-dots::after {
+        content: "";
+        animation: dots 1.5s steps(5, end) infinite;
+      }
+
+      @keyframes dots {
+        0%,
+        20% {
+          content: "";
+        }
+        40% {
+          content: ".";
+        }
+        60% {
+          content: "..";
+        }
+        80%,
+        100% {
+          content: "...";
+        }
+      }
+
+      .bounce-in {
+        animation: bounceIn 0.6s ease-out;
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-bg">
+    <!-- Header -->
+    <header class="text-center py-8 px-4">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">
+          <span class="gradient-bg bg-clip-text text-transparent"
+            >Portfolio</span
+          >
+          <span class="text-text">Neighborhood</span>
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Paste your portfolio URL and discover similar portfolios with
+          AI-powered analysis ✨
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Form -->
+    <main class="max-w-4xl mx-auto px-4 pb-12">
+      <div class="bg-white cute-border cute-shadow p-8 rounded-2xl mb-8">
+        <form id="portfolioForm" class="space-y-6">
+          <!-- Portfolio URL Input -->
+          <div>
+            <label
+              for="portfolioUrl"
+              class="block text-sm font-medium text-text mb-2"
+            >
+              Portfolio URL 🌐
+            </label>
+            <input
+              type="url"
+              id="portfolioUrl"
+              name="portfolioUrl"
+              required
+              placeholder="https://your-portfolio.com"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-main focus:outline-none transition-colors"
+            />
+          </div>
+
+          <!-- Keywords Input -->
+          <div>
+            <label
+              for="keywords"
+              class="block text-sm font-medium text-text mb-2"
+            >
+              Keywords (optional) 🏷️
+            </label>
+            <input
+              type="text"
+              id="keywords"
+              name="keywords"
+              placeholder="design, frontend, animation, accessibility"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-main focus:outline-none transition-colors"
+            />
+            <p class="text-sm text-gray-500 mt-1">
+              Comma-separated keywords to help find similar portfolios
+            </p>
+          </div>
+
+          <!-- Experience Level Slider -->
+          <div>
+            <label
+              for="experienceLevel"
+              class="block text-sm font-medium text-text mb-2"
+            >
+              Experience Level: <span id="experienceLabel">Mid-level</span> 👨‍💻
+            </label>
+            <input
+              type="range"
+              id="experienceLevel"
+              name="experienceLevel"
+              min="0"
+              max="100"
+              value="50"
+              class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div class="flex justify-between text-xs text-gray-500 mt-1">
+              <span>Entry</span>
+              <span>Senior</span>
+              <span>Director</span>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            id="analyzeBtn"
+            class="w-full gradient-bg text-text font-semibold py-4 px-6 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+          >
+            <span id="btnText">Find Similar Portfolios 🚀</span>
+            <span id="loadingText" class="hidden"
+              >Analyzing<span class="loading-dots"></span
+            ></span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection" class="hidden">
+        <!-- Analysis Summary -->
+        <div
+          id="analysisSummary"
+          class="bg-white cute-border cute-shadow p-6 rounded-2xl mb-6"
+        >
+          <h3 class="text-xl font-semibold mb-4">📊 Analysis Summary</h3>
+          <div id="summaryContent" class="space-y-3">
+            <!-- Summary content will be populated here -->
+          </div>
+        </div>
+
+        <!-- Similar Portfolios -->
+        <div id="similarPortfolios" class="space-y-4">
+          <h3 class="text-2xl font-semibold text-center mb-6">
+            🏘️ Your Portfolio Neighborhood
+          </h3>
+          <div
+            id="portfoliosGrid"
+            class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            <!-- Portfolio cards will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div
+        id="errorMessage"
+        class="hidden bg-red-50 border-2 border-red-200 text-red-700 p-4 rounded-xl text-center"
+      >
+        <p id="errorText"></p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 px-4 text-gray-500">
+      <p>Made with 💚 and AI magic</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
