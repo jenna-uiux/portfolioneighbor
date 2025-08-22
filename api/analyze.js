@@ -33,7 +33,31 @@ Portfolio URL: ${url}
 Keywords: ${keywords || "none"}
 Experience Level: ${experienceLevel || 50}
 
-Please find 5 real portfolios that are similar in style, approach, or content. Return ONLY a JSON object with this structure:
+Please find 5 real portfolios that are similar in style, approach, or content. Use the following WEIGHTED criteria for similarity scoring:
+
+**SIMILARITY WEIGHTS (Total 100%):**
+1. **Content & Focus (40%)**: Type of work showcased, industry focus, project types, portfolio purpose
+   - Includes keyword relevance and content alignment
+   - Most important factor for portfolio similarity
+
+2. **Visual Design & Aesthetics (30%)**: Color schemes, typography, layout style, visual hierarchy
+   - Overall design approach and visual identity
+
+3. **Experience Level Match (20%)**: Seniority alignment with provided experience level
+   - Career stage and professional level matching
+
+4. **Technical Approach (10%)**: Tech stack, interaction patterns, animation style
+   - Implementation methods and technical choices
+
+**SCORING GUIDELINES:**
+- 0.95-1.0: Exceptional match across all criteria
+- 0.90-0.94: Strong match with minor differences
+- 0.85-0.89: Good match with some variations
+- 0.80-0.84: Moderate match with notable differences
+- 0.75-0.79: Basic match with significant differences
+- 0.70-0.74: Minimal match, included for variety
+
+Return ONLY a JSON object with this structure:
 
 {
   "portfolios": [
@@ -42,7 +66,13 @@ Please find 5 real portfolios that are similar in style, approach, or content. R
       "title": "Real Person Name - Real Role",
       "snippet": "Brief description of what makes this portfolio similar",
       "score": 0.95,
-      "matchReason": "Why this portfolio matches (e.g., similar minimal design, same tech stack, etc.)"
+      "matchReason": "Detailed explanation focusing on content/focus match first, then visual design, experience level, and technical approach",
+      "matchBreakdown": {
+        "contentFocus": 0.95,
+        "visualDesign": 0.92,
+        "experienceLevel": 0.88,
+        "technicalApproach": 0.85
+      }
     }
   ],
   "summary": "Brief analysis of the input portfolio in one sentence",
@@ -56,9 +86,10 @@ Please find 5 real portfolios that are similar in style, approach, or content. R
 Requirements:
 - URLs must be real, accessible portfolio websites
 - Focus on designers, developers, and creative professionals
-- Consider the experience level and keywords provided
-- Score should be between 0.7 and 1.0 based on similarity
-- Provide specific reasons for the match
+- Apply the weighted criteria above for scoring (Content & Focus is most important)
+- Provide detailed match reasons mentioning specific criteria in order of importance
+- Include match breakdown for transparency
+- Consider keywords as part of content & focus evaluation
 
 Return ONLY the JSON object, nothing else.`;
 
