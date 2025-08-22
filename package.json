@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vercel dev",
     "build": "echo 'No build step required for static site'",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "vercel-build": "echo 'Static site - no build required'"
   },
   "keywords": [
     "portfolio",
