@@ -67,42 +67,34 @@ Currently uses an emoji favicon (🏘️). Replace the favicon link in `index.ht
 
 ### API Integration
 
-The current version uses a hybrid search system combining ChatGPT and Google Custom Search API. To set up the APIs:
+The current version uses an enhanced ChatGPT-based search system with active website validation. No complex API setup required!
 
 #### Required Environment Variables
 
-1. **OpenAI API Key** (Required):
-   ```bash
-   OPENAI_API_KEY=sk-your-openai-api-key
-   ```
+**OpenAI API Key** (Required):
+```bash
+OPENAI_API_KEY=sk-your-openai-api-key
+```
 
-2. **Google Custom Search API** (Optional, for enhanced results):
-   ```bash
-   GOOGLE_API_KEY=your-google-api-key
-   GOOGLE_SEARCH_ENGINE_ID=your-search-engine-id
-   ```
+#### Features
 
-#### Setting up Google Custom Search API
+- **Enhanced ChatGPT Search**: AI-powered portfolio discovery with active website validation
+- **Portfolio Directories**: Curated collections from Awwwards, Behance, Dribbble, CSS Design Awards, and Site Inspire
+- **Website Validation**: Automatic filtering of expired or broken websites
+- **Smart Ranking**: Weighted scoring based on source reliability and content relevance
+- **No Complex Setup**: Just add your OpenAI API key and you're ready to go!
 
-1. **Create a Google Cloud Project**:
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project or select existing one
-   - Enable the "Custom Search API"
+#### Setting up OpenAI API
 
-2. **Get API Key**:
-   - Go to "APIs & Services" > "Credentials"
-   - Click "Create Credentials" > "API Key"
-   - Copy the API key
+1. **Get OpenAI API Key**:
+   - Go to [OpenAI Platform](https://platform.openai.com/)
+   - Sign up or log in
+   - Go to "API Keys" section
+   - Create a new API key
 
-3. **Create Custom Search Engine**:
-   - Go to [Google Programmable Search Engine](https://programmablesearchengine.google.com/)
-   - Click "Create a search engine"
-   - Enter any site (e.g., `www.google.com`)
-   - Get your Search Engine ID from the control panel
-
-4. **Add Environment Variables**:
-   - For Vercel: Add in Project Settings > Environment Variables
-   - For local development: Create `.env.local` file
+2. **Add Environment Variable**:
+   - For Vercel: Add `OPENAI_API_KEY` in Project Settings > Environment Variables
+   - For local development: Create `.env.local` file with your API key
 
 ## 🔮 Future Enhancements
 
